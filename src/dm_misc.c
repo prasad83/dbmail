@@ -2033,7 +2033,8 @@ char * imap_get_envelope(GMimeMessage *message)
 	list = imap_append_header_as_string(list,part,"In-Reply-to");
 	/* message-id */
 	result = (char *)g_mime_message_get_message_id(message);
-	if (result && (! g_strrstr(result,"=")) && (! g_strrstr(result,"@(none)"))) {
+	// Bug-fix: Message-Id could have = in it (ex. <CA+V_QA9Y7VHyV3bUdghs=d==96=szbmjoXxM0OhR2sUh8ztqdg@mail.gmail.com>) */
+	if (result && /*(! g_strrstr(result,"=")) && */ (! g_strrstr(result,"@(none)"))) {
                 t = g_strdup_printf("<%s>", result);
 		s = dbmail_imap_astring_as_string(t);
 		list = g_list_append_printf(list,"%s", s);
